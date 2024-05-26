@@ -36,10 +36,10 @@ export class CarListComponent {
     const formValue = this.form?.value;
     if (formValue?.year || formValue?.brand || formValue?.model || formValue?.price)
       this.filteredCars = this.cars.filter(car =>
-        (formValue?.year && +car?.year === (+formValue.year)) ||
-        (formValue?.brand && car?.brand.toLowerCase().includes(formValue.brand.toLowerCase())) ||
-        (formValue?.model && car?.model.toLowerCase().includes(formValue.model.toLowerCase())) ||
-        (formValue?.price && +car?.price === (+formValue.price))
+        (!formValue.year || +car.year === +formValue.year) &&
+        (!formValue.brand || car.brand.toLowerCase().includes(formValue.brand.toLowerCase())) &&
+        (!formValue.model || car.model.toLowerCase().includes(formValue.model.toLowerCase())) &&
+        (!formValue.price || +car.price === +formValue.price)
       );
     else {
       this.filteredCars = this.cars
