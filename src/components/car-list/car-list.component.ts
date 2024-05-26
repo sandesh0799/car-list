@@ -18,10 +18,10 @@ export class CarListComponent {
 
   constructor(private carListService: CarListService, private fb: FormBuilder) {
     this.form = this.fb.group({
-      year: [''],
-      brand: [''],
-      model: [''],
-      price: [''],
+      year: [null],
+      brand: [null],
+      model: [null],
+      price: [null],
     });
   }
 
@@ -34,16 +34,20 @@ export class CarListComponent {
 
   public filterCars() {
     const formValue = this.form?.value;
-    this.filteredCars = this.cars?.filter(car =>
-      (!formValue?.year || +car?.year === +formValue?.year) ||
-      (!formValue?.brand || car?.brand.toLowerCase().includes(formValue?.brand.toLowerCase())) ||
-      (!formValue?.model || car?.model.toLowerCase().includes(formValue?.model.toLowerCase())) ||
-      (!formValue?.price || +car?.price === +formValue?.price)
-    );
+    if (formValue?.year || formValue?.brand || formValue?.model || formValue?.price)
+      this.filteredCars = this.cars.filter(car =>
+        (formValue?.year && +car?.year === (+formValue.year)) ||
+        (formValue?.brand && car?.brand.toLowerCase().includes(formValue.brand.toLowerCase())) ||
+        (formValue?.model && car?.model.toLowerCase().includes(formValue.model.toLowerCase())) ||
+        (formValue?.price && +car?.price === (+formValue.price))
+      );
+    else {
+      this.filteredCars = this.cars
+    }
   }
 
   public reset() {
     this.form.reset();
-    this.filterCars()
+    this.filteredCars = this.cars
   }
 }
